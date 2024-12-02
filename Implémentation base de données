@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS Gestion_Hospitaliere;
 USE Gestion_Hospitaliere;
 
 /************************************************************************************************/
---- A. CREATION DES TABLES
+--- B. CREATION DES TABLES
 /*************************************************************************************************/
 
 CREATE TABLE Medecin (
@@ -115,3 +115,32 @@ CREATE TABLE Facturation (
    FOREIGN KEY(id_Feuille) REFERENCES Feuille(id_Feuille)
 );
 
+
+
+
+
+
+/************************************************************************************************/
+--- C. CREATION DE L'UTILISATEUR RECEPTIONNISTE AVEC DES PRIVILEGES LIMITES
+/*************************************************************************************************/
+
+CREATE USER 'receptionniste'@'localhost' IDENTIFIED BY 'AzERt@23t';
+GRANT SELECT, INSERT ON Gestion_Hospitaliere.Patient TO 'receptionniste'@'localhost';
+GRANT SELECT ON Gestion_Hospitaliere.Chambre TO 'receptionniste'@'localhost';
+
+/************************************************************************************************/
+--- D. CREATION DE L'UTILISATEUR MEDECIN AVEC DES PRIVILEGES LIMITES
+/*************************************************************************************************/
+
+CREATE USER 'medecin'@'localhost' IDENTIFIED BY 'QwtER@1';
+GRANT SELECT ON Gestion_Hospitaliere.Patient TO 'medecin'@'localhost';
+GRANT SELECT, INSERT ON Gestion_Hospitaliere.Traitement TO 'medecin'@'localhost';
+GRANT SELECT ON Gestion_Hospitaliere.Dossier_Medical TO 'medecin'@'localhost';
+
+/************************************************************************************************/
+--- E. CREATION DE L'UTILISATEUR COMPTABLE AVEC DES PRIVILEGES LIMITES
+/*************************************************************************************************/
+
+CREATE USER 'comptable'@'localhost' IDENTIFIED BY 'BZarP@5T';
+GRANT SELECT ON Gestion_Hospitaliere.Facturation TO 'comptable'@'localhost';
+GRANT SELECT ON Gestion_Hospitaliere.Patient TO 'comptable'@'localhost';
