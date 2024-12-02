@@ -1,0 +1,117 @@
+/************************************************************************************************/
+--- A. CREATION BASE DE DONNEES
+/************************************************************************************************/
+
+CREATE DATABASE IF NOT EXISTS Gestion_Hospitaliere;
+USE Gestion_Hospitaliere;
+
+/************************************************************************************************/
+--- A. CREATION DES TABLES
+/*************************************************************************************************/
+
+CREATE TABLE Medecin (
+    id_Medecin INT AUTO_INCREMENT PRIMARY KEY,
+    nom_Medecin VARCHAR(50) NOT NULL,
+    prenom_Medecin VARCHAR(50) NOT NULL,
+    specialite VARCHAR(50) NOT NULL,
+    email_Medecin VARCHAR(50) NOT NULL UNIQUE,
+    telephone_Medecin VARCHAR(15) NOT NULL,
+    adresse_Medecin VARCHAR(100),
+    genre_Medecin VARCHAR(10)
+);
+
+CREATE TABLE Comptable (
+    id_Comptable INT AUTO_INCREMENT PRIMARY KEY,
+    nom_Comptable VARCHAR(50) NOT NULL,
+    prenom_Comptable VARCHAR(50) NOT NULL,
+    telephone_Comptable VARCHAR(15) NOT NULL,
+    mail_Comptable VARCHAR(50)
+);
+
+CREATE TABLE Salle (
+    id_Salle INT AUTO_INCREMENT PRIMARY KEY,
+    nom_Salle VARCHAR(50) NOT NULL,
+    type_Salle VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Receptionniste (
+    id_Receptionniste INT AUTO_INCREMENT PRIMARY KEY,
+    nom_Receptionniste VARCHAR(50) NOT NULL,
+    prenom_Receptionniste VARCHAR(50) NOT NULL,
+    email_Receptionniste VARCHAR(50),
+    telephone_Receptionniste VARCHAR(15)
+);
+
+CREATE TABLE Users (
+    id_User INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,  -- Pour permettre le hachage
+    role ENUM('receptionniste', 'medecin', 'comptable') NOT NULL
+);
+
+CREATE TABLE Chambre (
+    id_Chambre INT AUTO_INCREMENT PRIMARY KEY,
+    capacite TINYINT NOT NULL,  -- Capacité maximale
+    numero_Lit SMALLINT UNIQUE NOT NULL
+);
+
+CREATE TABLE Patient (
+    id_Patient INT AUTO_INCREMENT PRIMARY KEY,
+    nom_Patient VARCHAR(50) NOT NULL,
+    prenom_Patient VARCHAR(50) NOT NULL,
+    genre_Patient VARCHAR(10),
+    date_naissance DATE NOT NULL,
+    telephone_Patient VARCHAR(15) NOT NULL,
+    email_Patient VARCHAR(50),
+    id_Chambre INT,
+    FOREIGN KEY (id_Chambre) REFERENCES Chambre(id_Chambre)
+);
+
+CREATE TABLE Dossier_Medical (
+    id_dossier INT AUTO_INCREMENT PRIMARY KEY,
+    groupe_sanguin VARCHAR(5) NOT NULL,
+    Statut_Rhesus VARCHAR(10) NOT NULL,
+    Observation TEXT,  -- Pour des observations plus longues
+    date_Ouverture DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_Receptionniste INT NOT NULL,
+    id_Patient INT NOT NULL,
+    FOREIGN KEY (id_Receptionniste) REFERENCES Receptionniste(id_Receptionniste),
+    FOREIGN KEY (id_Patient) REFERENCES Patient(id_Patient)
+);
+
+CREATE TABLE Feuille (
+   id_Feuille INT AUTO_INCREMENT PRIMARY KEY,
+   date_Debut DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   date_Fin DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   Poids DECIMAL(5,2),  -- Poids en kg
+   Taille DECIMAL(5,2),  -- Taille en cm
+   Pathologie TEXT,  -- Pour des descriptions plus longues
+   id_dossier INT NOT NULL,
+   FOREIGN KEY (id_dossier) REFERENCES Dossier_Medical(id_dossier)
+);
+
+CREATE TABLE Traitement (
+   id_Traitement INT AUTO_INCREMENT PRIMARY KEY,
+   remarque_Traitement TEXT,  -- Pour des remarques plus longues
+   conclusion TEXT,  -- Pour des conclusions plus longues
+   date_heure DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Date par défaut
+   id_Medecin INT NOT NULL,
+   id_Feuille INT NOT NULL,
+   FOREIGN KEY(id_Medecin) REFERENCES Medecin(id_Medecin),
+   FOREIGN KEY(id_Feuille) REFERENCES Feuille(id_Feuille)
+);
+
+CREATE TABLE Facturation (
+   id_Facturation INT AUTO_INCREMENT PRIMARY KEY,
+   date_facturation DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Date par défaut
+   montant DECIMAL(10,2),  -- Montant en format décimal
+   Acteur VARCHAR(50),
+   telephone_Acteur VARCHAR(15),
+   id_Patient INT NOT NULL,
+   id_Comptable INT,
+   id_Feuille INT NOT NULL,
+   FOREIGN KEY(id_Patient) REFERENCES Patient(id_Patient),
+   FOREIGN KEY(id_Comptable) REFERENCES Comptable(id_Comptable),
+   FOREIGN KEY(id_Feuille) REFERENCES Feuille(id_Feuille)
+);
+
