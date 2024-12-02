@@ -2,8 +2,8 @@
 --- A. CREATION BASE DE DONNEES
 /************************************************************************************************/
 
-CREATE DATABASE IF NOT EXISTS Gestion_Hospitaliere;
-USE Gestion_Hospitaliere;
+CREATE DATABASE IF NOT EXISTS gestion_Hopital_db;
+USE gestion_Hopital_db;
 
 /************************************************************************************************/
 --- B. CREATION DES TABLES
@@ -150,22 +150,22 @@ CREATE TABLE Facturation(
 /*************************************************************************************************/
 
 CREATE USER 'receptionniste'@'localhost' IDENTIFIED BY 'AzERt@23t';
-GRANT SELECT, INSERT ON Gestion_Hospitaliere.Patient TO 'receptionniste'@'localhost';
-GRANT SELECT ON Gestion_Hospitaliere.Chambre TO 'receptionniste'@'localhost';
+GRANT SELECT, INSERT ON gestion_Hopital_db.Patient TO 'receptionniste'@'localhost';
+GRANT SELECT ON gestion_Hopital_db.Chambre TO 'receptionniste'@'localhost';
 
 /************************************************************************************************/
 --- D. CREATION DE L'UTILISATEUR MEDECIN AVEC DES PRIVILEGES LIMITES
 /*************************************************************************************************/
 
 CREATE USER 'medecin'@'localhost' IDENTIFIED BY 'QwtER@1';
-GRANT SELECT ON Gestion_Hospitaliere.Patient TO 'medecin'@'localhost';
-GRANT SELECT, INSERT ON Gestion_Hospitaliere.Traitement TO 'medecin'@'localhost';
-GRANT SELECT ON Gestion_Hospitaliere.Dossier_Medical TO 'medecin'@'localhost';
+GRANT SELECT ON gestion_Hopital_db.Patient TO 'medecin'@'localhost';
+GRANT SELECT, INSERT ON gestion_Hopital_db.Traitement TO 'medecin'@'localhost';
+GRANT SELECT ON gestion_Hopital_db.Dossier_Medical TO 'medecin'@'localhost';
 
 /************************************************************************************************/
 --- E. CREATION DE L'UTILISATEUR COMPTABLE AVEC DES PRIVILEGES LIMITES
 /*************************************************************************************************/
 
 CREATE USER 'comptable'@'localhost' IDENTIFIED BY 'BZarP@5T';
-GRANT SELECT ON Gestion_Hospitaliere.Facturation TO 'comptable'@'localhost';
-GRANT SELECT ON Gestion_Hospitaliere.Patient TO 'comptable'@'localhost';
+GRANT SELECT ON gestion_Hopital_db.Facturation TO 'comptable'@'localhost';
+GRANT SELECT ON gestion_Hopital_db.Patient TO 'comptable'@'localhost';
