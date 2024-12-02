@@ -9,12 +9,6 @@ Ce projet consiste en un système de gestion hospitalière qui permet de gérer 
 
 ## Installation
 
-### Création de la Base de Données
-1. Ouvrez votre client MySQL.
-2. Exécutez le script suivant pour créer la base de données :
-   ```sql
-   CREATE DATABASE IF NOT EXISTS Gestion_Hospitaliere;
-   USE Gestion_Hospitaliere;
 
 ### Cette Base de données contient 11 Tables
 - Medecin
